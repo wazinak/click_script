@@ -12,7 +12,7 @@ import name
 
 chrome_options = webdriver.ChromeOptions()
 service = Service(executable_path=ChromeDriverManager().install())
-# chrome_options.add_argument("--headless")
+chrome_options.add_argument("--headless")
 chrome_options.add_argument("--window-size=1600,1400")
 chrome_options.add_experimental_option("excludeSwitches", ["enable-automation"])
 chrome_options.add_experimental_option('useAutomationExtension', False)
@@ -22,7 +22,8 @@ chrome_options.add_argument("--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x
                             " AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.3")
 driver = webdriver.Chrome(service=service, options=chrome_options)
 
-user_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36'
+user_agent = ('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) '
+              'Chrome/74.0.3729.169 Safari/537.36')
 headers = {'User-Agent': user_agent}
 
 
@@ -42,7 +43,21 @@ def element_click(driver: WebDriver | WebElement, path: str) -> bool:
 
 
 def main():
-    pass
+    url = 'https://h3llo.cloud/ru'
+    driver.get(url)
+    sleep(1)
+    element_click(driver, name.cookie_window)
+    sleep(1)
+    move_to_element(driver, driver.find_element(By.XPATH, name.switcher_btn))
+    element_click(driver, name.switcher_btn)
+    count_ass_click = 0
+    while True:
+        element_click(driver, name.ass_btn)
+        count_ass_click += 1
+        driver.switch_to.window(driver.window_handles[-1])
+        driver.close()
+        driver.switch_to.window(driver.window_handles[0])
+        print('Послали в жопу', count_ass_click, 'раз(а)')
 
 
 if __name__ == "__main__":
